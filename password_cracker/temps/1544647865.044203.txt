@@ -1,0 +1,2 @@
+# this is a random file that needs to be compressed into a zip, the password is randomly assigned
+password : ksoldu
