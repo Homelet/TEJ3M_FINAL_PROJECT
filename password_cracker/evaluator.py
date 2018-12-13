@@ -3,6 +3,17 @@ Designed to evaluate a string in some base
 """
 
 
+def evaluate_weight(str, trained):
+	"""
+	To evaluate the string based on the trained data base (the data base method should be using "train_two")
+	
+	:param str:
+	:param trained:
+	:return:
+	"""
+	pass
+
+
 def decode_password(index: int, letter_dic: list):
 	"""
 	to decode a specific index to the letter inside a letter_dic, and feed with the letter dic
