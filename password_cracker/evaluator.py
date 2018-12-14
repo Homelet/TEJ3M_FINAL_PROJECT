@@ -3,15 +3,51 @@ Designed to evaluate a string in some base
 """
 
 
-def evaluate_weight(str, trained):
+def evaluate_weight(string: str, letter_dic: list, length, trained):
 	"""
 	To evaluate the string based on the trained data base (the data base method should be using "train_two")
 	
-	:param str:
+	:param length:
+	:param letter_dic:
+	:param string:
 	:param trained:
 	:return:
 	"""
-	pass
+	digit_index = 0
+	weight = 0
+	while digit_index < length:
+		weight += trained[digit_index][letter_dic.index(string[digit_index])][1]
+		digit_index += 1
+	return weight
+
+
+def create_weighted_list(length, letter_dic: list, trained):
+	indexed_list = [0] * length
+	weighted_list = []
+	while True:
+		string = "".join([letter_dic[letter_index] for letter_index in indexed_list])
+		weighted_list.append((string, evaluate_weight(string, letter_dic, length, trained)))
+		# move to next index
+		# if not having next index, that means we are finished
+		if not move_to_next_index(length - 1, indexed_list, letter_dic.__len__()):
+			break
+		print(string)
+	weighted_list.sort(key=lambda pair: pair[1], reverse=True)
+	return weighted_list
+
+
+def move_to_next_index(checking_index, indexed_list, max_length):
+	value = indexed_list[checking_index]
+	# if can have next index then add one
+	if value + 1 < max_length:
+		indexed_list[checking_index] += 1
+		return True
+	else:
+		if checking_index == 0:
+			return False
+		# clear the buffer, then move to previous level
+		indexed_list[checking_index] = 0
+		return move_to_next_index(checking_index - 1, indexed_list, max_length)
 
 
 def decode_password(index: int, letter_dic: list):
@@ -29,7 +65,7 @@ def decode_password(index: int, letter_dic: list):
 def encode_password(password: str, letter_dic: list):
 	"""
 	to encode a specific password to a integer representative, in the base of letter_dic, in another word, to
-	get the index of the string that lays on the letter_dic base, and one of the credential it follows is that
+	get the index of the string that lays on the letter_dic base, one of the credential it follows is that
 	it is going to have the same things in the same base, with the same value for decode and encode if you do
 	something like:
 

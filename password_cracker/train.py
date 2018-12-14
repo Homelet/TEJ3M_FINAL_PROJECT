@@ -130,6 +130,7 @@ def train_two(data_base=PASSWORD_DICTIONARY, letter_dic=PASSWORD_BASE):
 	weighted = []
 	# start the
 	for digit_length, local_data in classified_data:
+		# [(digit_length, [[[index_in_list, weight], ... ]: index_by_digit, ...]), ...]
 		# the first stores the digit
 		# the second is the list
 		# the third is the digit index
@@ -147,14 +148,14 @@ def train_two(data_base=PASSWORD_DICTIONARY, letter_dic=PASSWORD_BASE):
 					weighted_list[1][digit][letter_dic.index(letter)][1] += 1
 				else:
 					raise RuntimeError("Training Error : char not in the letter_dic")
-			local_data_size = float(local_data.__len__())
-			# calculate the weight inside each range
-			# fixme please note that, we are expecting there are about 0.0000000000000001 fluctuation
-			# because we couldn't represent the float exactly,
-			for i in range(base_length):
-				local_accumulate = weighted_list[1][digit][i][1]
-				weighted_list[1][digit][i][1] = local_accumulate / local_data_size if local_accumulate > 0 else 0.0
-			weighted_list[1][digit].sort(key=lambda pair: pair[1], reverse=True)
+		# local_data_size = float(local_data.__len__())
+		# calculate the weight inside each range
+		# fixme please note that, we are expecting there are about 0.0000000000000001 fluctuation
+		# because we couldn't represent the float exactly,
+		# for i in range(base_length):
+		# 	local_accumulate = weighted_list[1][digit][i][1]
+		# 	weighted_list[1][digit][i][1] = local_accumulate / local_data_size if local_accumulate > 0 else 0.0
+		# weighted_list[1][digit].sort(key=lambda pair: pair[1], reverse=True)
 		# append it to the list
 		weighted.append(weighted_list)
 	trained_info = {
@@ -176,6 +177,7 @@ def prepare_trained_data_base(version=2):
 	"""
 	json_path = os.path.join(DATA_PATH, "trained_v" + str(version) + ".json")
 	if not os.path.isfile(json_path):
+		print("Fail to detect data_base on path :", json_path)
 		return None
 	with open(json_path, 'r') as dt:
 		data = json.load(dt)
@@ -183,5 +185,5 @@ def prepare_trained_data_base(version=2):
 
 
 if __name__ == '__main__':
-	train_one()
+	# train_one()
 	train_two()

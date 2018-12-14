@@ -82,7 +82,10 @@ def smart_attack(zip_file_path, destination_path=EXTRACT_TO_PATH):
 	:return:
 	"""
 	# try to load the data base
-	trained = train.prepare_trained_data_base()
+	trained = train.prepare_trained_data_base(version=1)
+	if trained["train_method"] is not "train_one":
+		print("Fail to load Trained data")
+		return
 	# if fail use brutal force
 	if trained is None:
 		print("Fail to load Trained data, using brutal force")
@@ -142,6 +145,27 @@ def smart_attack(zip_file_path, destination_path=EXTRACT_TO_PATH):
 						break
 
 
+def smart_attack_2(zip_file_path, destination_path=EXTRACT_TO_PATH):
+	# try to load the data base
+	trained = train.prepare_trained_data_base(version=2)
+	if trained["train_method"] != "train_two":
+		print("Fail to load Trained data")
+		return
+	# if fail use brutal force
+	if trained is None:
+		print("Fail to load Trained data, using brutal force")
+		brute_force_attack(zip_file_path, DEFAULT_LETTER_BASE)
+		return
+	else:
+		print("Using Trained data base : {}".format(trained["time_stamp"]))
+	# fetch the base it used to train and the data
+	base = trained["base"]
+	data = trained["trained_data"]
+	# for length, data_base in data:
+	print(evaluator.create_weighted_list(length=data[4][0], letter_dic=base, trained=data[4][1]))
+	pass
+
+
 def both_attack():
 	"""
 	function takes the zip file pointer and dictionary file pointer as arguments. This method perform a combination of
@@ -154,12 +178,13 @@ def both_attack():
 
 
 def main():
-	smart_attack(
-			os.path.join(PATH, "zips", "1544647865.044203.zip")
-	)
-	smart_attack(
-			os.path.join(PATH, "zips", "1544648438.169172.zip")
-	)
+	# smart_attack(
+	# 		os.path.join(PATH, "zips", "1544647865.044203.zip")
+	# )
+	# smart_attack(
+	# 		os.path.join(PATH, "zips", "1544648438.169172.zip")
+	# )
+	smart_attack_2(None)
 
 
 if __name__ == '__main__':
